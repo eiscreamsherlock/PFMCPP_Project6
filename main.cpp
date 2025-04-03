@@ -56,16 +56,16 @@ Purpose:  This project will show you the difference between member functions and
 
 #include <iostream>
 #include <string>
+
 struct T
 {
-    float value;
-    std::string name;
-
-    T(float v, const char* n)
+    int value = 0;
+    std::string name = {};
+    T(int v, const char* n) : value(v)
     {
-        this->value = v;
         this->name = n;
-    }  //1
+    }
+     //1
     //2
     //3
 };
@@ -82,29 +82,40 @@ struct Widget                                //4
 
 struct U
 {
-    float <#name1#> { 0 }, <#name2#> { 0 };
-    <#returnType#> <#memberFunction#>(<#type name#>* <#updatedValue#>)      //12
+    float uFloatie1 { 0 }, uFloatie2 { 0 };
+    float unsharedFunc(float* updateValue)      //12
     {
-        
-    }
-};
-
-struct <#structname2#>
-{
-    static <#returntype#> <#staticFunctionA#>(U* that, <#type name#>* <#updatedValue#> )        //10
-    {
-        std::cout << "U's <#name1#> value: " << that-><#name1#> << std::endl;
-        that-><#name1#> = <#updatedValue#>;
-        std::cout << "U's <#name1#> updated value: " << that-><#name1#> << std::endl;
-        while( std::abs(that-><#name2#> - that-><#name1#>) > 0.001f )
+        std::cout << "U's uFloatie1 value: " << this->uFloatie1 << std::endl;
+        this->uFloatie1 = *updateValue;
+        std::cout << "U's uFloatie1 updated value: " << this->uFloatie1 << std::endl;
+        while( std::abs(this->uFloatie2 - this->uFloatie1) > 0.001f )
         {
             /*
              write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
              */
-            that-><#name2#> += ;
+            this->uFloatie2 += 1.f;
         }
-        std::cout << "U's <#name2#> updated value: " << that-><#name2#> << std::endl;
-        return that-><#name2#> * that-><#name1#>;
+        std::cout << "U's uFloatie2's updated value: " << this->uFloatie2 << std::endl;
+        return this->uFloatie2 * this->uFloatie1;
+    }
+};
+
+struct TwoStruct
+{
+    static float sharedFunc(U* that, float* updateValue )        //10
+    {
+        std::cout << "U's uFloatie1 value: " << that->uFloatie1 << std::endl;
+        that->uFloatie1 = *updateValue;
+        std::cout << "U's uFloatie1 updated value: " << that->uFloatie1 << std::endl;
+        while( std::abs(that->uFloatie2 - that->uFloatie1) > 0.001f )
+        {
+            /*
+             write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
+             */
+            that->uFloatie2 += 1.f;
+        }
+        std::cout << "U's uFloatie2's updated value: " << that->uFloatie2 << std::endl;
+        return that->uFloatie2 * that->uFloatie1;
     }
 };
         
@@ -124,17 +135,32 @@ struct <#structname2#>
 
 int main()
 {
-    T test1(3.f,'q');                                             //6
-    T test2(3.14, 'p');                                             //6
+    char queue = 'q';
+    char pee = 'p';
+    char* ptrQ = nullptr;
+    char* ptrP = nullptr;
+    ptrQ = &queue;
+    ptrP = &pee;
+    T test1(8, ptrQ);                                             //6
+    T test2(3, ptrP);                                             //6
     
     Widget f;                                            //7
-    auto* smaller = f.compare(test1, test2);                              //8
-    std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    auto* smaller = f.compare(&test1, &test2);                              //8
+    if (smaller != nullptr)
+    {
+        std::cout << "the smaller one is " << smaller->name << std::endl; //10
+    }
+    else
+    {
+        std::cout << "Comparison returned null. Possible Reasons include:\n";
+        std::cout << "1. Both items for comparison are the same value and neither is smaller.\n";
+        std::cout << "2. One or both items are not comparible.\n";
+    }
     
-    U <#name3#>;
+    U yu;
     float updatedValue = 5.f;
-    std::cout << "[static func] <#name3#>'s multiplied values: " << <#structname2#>::<#staticFunctionA#>( , ) << std::endl;                  //11
+    std::cout << "[static func] yu's multiplied values: " << TwoStruct::sharedFunc( &yu , &updatedValue ) << std::endl;                  //11
     
-    U <#name4#>;
-    std::cout << "[member func] <#name4#>'s multiplied values: " << <#name4#>.<#memberFunction#>( &updatedValue ) << std::endl;
+    U ewe;
+    std::cout << "[member func] ewe's multiplied values: " << ewe.unsharedFunc( &updatedValue ) << std::endl;
 }
