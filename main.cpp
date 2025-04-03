@@ -135,14 +135,10 @@ struct TwoStruct
 
 int main()
 {
-    char queue = 'q';
-    char pee = 'p';
-    char* ptrQ = nullptr;
-    char* ptrP = nullptr;
-    ptrQ = &queue;
-    ptrP = &pee;
-    T test1(8, ptrQ);                                             //6
-    T test2(3, ptrP);                                             //6
+    const char* queue = "q";
+    const char* pee = "p";
+    T test1(2, queue);                                             //6
+    T test2(3, pee);                                             //6
     
     Widget f;                                            //7
     auto* smaller = f.compare(&test1, &test2);                              //8
