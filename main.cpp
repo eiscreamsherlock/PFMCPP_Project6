@@ -82,18 +82,22 @@ struct U
     float uFloatie1 { 0 }, uFloatie2 { 0 };
     float unsharedFunc(float* updateValue)      //12
     {
-        std::cout << "U's uFloatie1 value: " << this->uFloatie1 << std::endl;
-        this->uFloatie1 = *updateValue;
-        std::cout << "U's uFloatie1 updated value: " << this->uFloatie1 << std::endl;
-        while( std::abs(this->uFloatie2 - this->uFloatie1) > 0.001f )
+        if (updateValue != nullptr)
         {
-            /*
-             write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
-             */
-            this->uFloatie2 += 1.f;
+            std::cout << "U's uFloatie1 value: " << this->uFloatie1 << std::endl;
+            this->uFloatie1 = *updateValue;
+            std::cout << "U's uFloatie1 updated value: " << this->uFloatie1 << std::endl;
+            while( std::abs(this->uFloatie2 - this->uFloatie1) > 0.001f )
+            {
+                /*
+                 write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
+                 */
+                this->uFloatie2 += 1.f;
+            }
+            std::cout << "U's uFloatie2's updated value: " << this->uFloatie2 << std::endl;
+            return this->uFloatie2 * this->uFloatie1;
         }
-        std::cout << "U's uFloatie2's updated value: " << this->uFloatie2 << std::endl;
-        return this->uFloatie2 * this->uFloatie1;
+        return 0.f;            // not sure about this one
     }
 };
 
@@ -101,18 +105,22 @@ struct TwoStruct
 {
     static float sharedFunc(U* that, float* updateValue )        //10
     {
-        std::cout << "U's uFloatie1 value: " << that->uFloatie1 << std::endl;
-        that->uFloatie1 = *updateValue;
-        std::cout << "U's uFloatie1 updated value: " << that->uFloatie1 << std::endl;
-        while( std::abs(that->uFloatie2 - that->uFloatie1) > 0.001f )
+        if (that != nullptr && updateValue != nullptr)
         {
-            /*
-             write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
-             */
-            that->uFloatie2 += 1.f;
+            std::cout << "U's uFloatie1 value: " << that->uFloatie1 << std::endl;
+            that->uFloatie1 = *updateValue;
+            std::cout << "U's uFloatie1 updated value: " << that->uFloatie1 << std::endl;
+            while( std::abs(that->uFloatie2 - that->uFloatie1) > 0.001f )
+            {
+                /*
+                 write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
+                 */
+                that->uFloatie2 += 1.f;
+            }
+            std::cout << "U's uFloatie2's updated value: " << that->uFloatie2 << std::endl;
+            return that->uFloatie2 * that->uFloatie1;
         }
-        std::cout << "U's uFloatie2's updated value: " << that->uFloatie2 << std::endl;
-        return that->uFloatie2 * that->uFloatie1;
+        return 0.f;            // not sure about this one
     }
 };
         
@@ -151,9 +159,9 @@ int main()
     }
     
     U yu;
+    //U* yuPtr = nullptr;
     float updatedValue = 5.f;
     std::cout << "[static func] yu's multiplied values: " << TwoStruct::sharedFunc( &yu , &updatedValue ) << std::endl;                  //11
-    
     U ewe;
     std::cout << "[member func] ewe's multiplied values: " << ewe.unsharedFunc( &updatedValue ) << std::endl;
 }
