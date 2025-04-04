@@ -61,10 +61,7 @@ struct T
 {
     int value = 0;
     std::string name = {};
-    T(int v, const char* n) : value(v)
-    {
-        this->name = n;
-    }
+    T(int v, const char* n) : value(v), name(n) { }
      //1
     //2
     //3
